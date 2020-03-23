@@ -22,7 +22,7 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
-    const user = await Users.findBy({ username });
+    const [user] = await Users.findBy({ username });
     if (user && bcrypt.compareSync(password, user.password)) {
       req.session.user = {
         id: user.id,
@@ -34,7 +34,7 @@ router.post("/login", async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "there was an error", error: err });
+    res.status(500).json({ message: "there was an error", error: err.message });
   }
 });
 
